@@ -1,0 +1,80 @@
+---
+interface Props {
+  title: string;
+  lang?: 'fi' | 'en';
+  activePage?: string;
+}
+
+const { title, lang = 'fi', activePage = '' } = Astro.props;
+import '../styles/global.css';
+
+const navItems = lang === 'fi'
+  ? [
+      { href: '/', label: 'Etusivu' },
+      { href: '/oppi/', label: 'Oppiminen' },
+      { href: '/sanasto/', label: 'Sanasto' },
+    ]
+  : [
+      { href: '/en/', label: 'Home' },
+      { href: '/en/learn/', label: 'Learn' },
+      { href: '/en/glossary/', label: 'Glossary' },
+    ];
+
+const langToggle = lang === 'fi'
+  ? { href: '/en/', label: 'EN' }
+  : { href: '/', label: 'FI' };
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="icon" type="image/png" href="/HKI_DDC.png" />
+  </head>
+  <body>
+    <nav class="nav-header">
+      <div class="nav-inner">
+        <a href={lang === 'fi' ? '/' : '/en/'} class="nav-logo">
+          <img src="/HKI_DDC.png" alt="Helsinki DDC" />
+          <span>HELSINKI DDC</span>
+        </a>
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul class="nav-links">
+          {navItems.map(item => (
+            <li>
+              <a href={item.href} class={activePage === item.label ? 'active' : ''}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={langToggle.href} class="lang-toggle">{langToggle.label}</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <slot />
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; Helsinki DDC</p>
+      </div>
+    </footer>
+
+    <script is:inline>
+      document.querySelector('.nav-toggle')?.addEventListener('click', function() {
+        const links = document.querySelector('.nav-links');
+        const expanded = this.getAttribute('aria-expanded') === 'true';
+        links?.classList.toggle('open');
+        this.setAttribute('aria-expanded', String(!expanded));
+      });
+    </script>
+  </body>
+</html>

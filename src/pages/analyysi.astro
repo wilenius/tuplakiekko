@@ -1,0 +1,306 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const era1Stats = [
+  { what: 'syöttö/ohitus OUT', hw: 2, ty: 3, ms: 2, tk: 8 },
+  { what: 'johtoheitto OUT', hw: 0, ty: 1, ms: 3, tk: 1 },
+  { what: 'tuplapoltto OUT', hw: 2, ty: 0, ms: 1, tk: 0 },
+  { what: 'soolopoltto OUT', hw: 1, ty: 1, ms: 0, tk: 0 },
+  { what: 'offaus OUT', hw: 1, ty: 0, ms: 0, tk: 0 },
+  { what: 'tiputus/rähmä', hw: 1, ty: 1, ms: 1, tk: 1 },
+  { what: 'tiputettu tippi', hw: 1, ty: 1, ms: 1, tk: 0 },
+  { what: 'luovutus', hw: 1, ty: 0, ms: 1, tk: 2 },
+  { what: 'voittoheitto', hw: 1, ty: 0, ms: 1, tk: 0 },
+];
+
+const era1Events = [
+  { time: '1:47', event: 'TK syöttö out' },
+  { time: '2:03', event: 'MS ohitus upsilla' },
+  { time: '2:45', event: 'MS rähmä' },
+  { time: '3:02', event: 'TK johto out' },
+  { time: '3:40', event: 'HW tuplapoltto out (myös myöhässä)' },
+  { time: '4:57', event: 'TK rähmä' },
+  { time: '5:16', event: 'TY & TK syötöt out' },
+  { time: '5:45', event: 'MS tuplapoltto out' },
+  { time: '6:17', event: 'TK syöttö out' },
+  { time: '6:38', event: 'TK soolopoltto, TY out' },
+  { time: '7:50', event: 'TY syöttö out' },
+  { time: '8:17', event: 'MS tiputtaa tipin' },
+  { time: '8:55', event: 'HW rähmä' },
+  { time: '9:25', event: 'TY rähmä' },
+  { time: '9:55', event: 'tuplatilanne, TK luovutus' },
+  { time: '10:47', event: 'MS ja HW syötöt out' },
+  { time: '11:10', event: 'TK syöttö out' },
+  { time: '12:02', event: 'HW tuplauspoltto' },
+  { time: '12:42', event: 'TY & HW soolopoltot out' },
+  { time: '13:42', event: 'HW syöttö out' },
+  { time: '14:30', event: 'TK syöttö out' },
+  { time: '15:00', event: 'HW & TY tuplahyökkäys' },
+  { time: '15:27', event: 'MS johtoheitto out' },
+  { time: '16:16', event: 'TY syöttö out' },
+  { time: '16:58', event: 'MS syöttö out' },
+  { time: '17:25', event: 'HW offi out' },
+  { time: '18:08', event: 'TK ohitus out' },
+  { time: '18:40', event: 'MS johto out' },
+  { time: '19:30', event: 'HW & TY rähmää tipit' },
+  { time: '20:52', event: 'TK syöttö out' },
+  { time: '21:12', event: 'TK ohitus out' },
+  { time: '21:52', event: 'MS johto out' },
+];
+
+const era2Stats = [
+  { what: 'syöttö/ohitus OUT', hw: 1, ty: 1, ms: 3, tk: 5 },
+  { what: 'johtoheitto OUT', hw: 1, ty: 2, ms: 0, tk: 0 },
+  { what: 'tuplapoltto OUT', hw: 1, ty: 1, ms: 1, tk: 2 },
+  { what: 'soolopoltto OUT', hw: 1, ty: 1, ms: 0, tk: 3 },
+  { what: 'offaus OUT', hw: 1, ty: 1, ms: 1, tk: 0 },
+  { what: 'tiputus/rähmä', hw: 0, ty: 0, ms: 0, tk: 1 },
+  { what: 'tiputettu tippi', hw: 0, ty: 1, ms: 1, tk: 1 },
+  { what: 'luovutus', hw: 0, ty: 0, ms: 1, tk: 3 },
+  { what: 'voittoheitto', hw: 0, ty: 0, ms: 2, tk: 0 },
+];
+
+const era2Events = [
+  { time: '26:37', event: 'MS polttoheitto out' },
+  { time: '27:10', event: 'TK syöttö out' },
+  { time: '27:30', event: 'MS syöttö out' },
+  { time: '27:58', event: 'HW off out, TY tipin rähmäys' },
+  { time: '29:22', event: 'TK luovutus' },
+  { time: '30:03', event: 'HW & TK soolopoltot out' },
+  { time: '30:45', event: 'MS tiputettu tippi, TK luovutus' },
+  { time: '31:33', event: 'TK syöttö out' },
+  { time: '31:52', event: 'TK rähmä' },
+  { time: '32:41', event: 'TY johto out' },
+  { time: '33:25', event: 'HW johto out' },
+  { time: '34:15', event: 'TK luovutus' },
+  { time: '35:30', event: 'TY soolopoltto out, HW ohitus out' },
+  { time: '36:52', event: 'TK soolopoltto out' },
+  { time: '37:25', event: 'HW poltto out, MS luovutus' },
+  { time: '38:00', event: 'TY soolopoltto, TK soolopoltto out' },
+  { time: '38:46', event: 'TY johto out' },
+  { time: '39:22', event: 'TY tuplapoltto out' },
+  { time: '40:29', event: 'TK ohitus out' },
+  { time: '41:06', event: 'MS syöttö out' },
+  { time: '41:31', event: 'TK syöttö out, MS ohitus out' },
+  { time: '42:05', event: 'MS ohitusheitto' },
+  { time: '43:05', event: 'TK tuplapoltto out' },
+  { time: '44:20', event: 'TK syöttö out' },
+  { time: '44:45', event: 'TY offi out, MS tuplapoltto' },
+  { time: '45:45', event: 'MS offi out, TK rähmätty tip' },
+  { time: '46:40', event: 'TK tuplapoltto out' },
+  { time: '47:12', event: 'TY ohitus out' },
+  { time: '47:41', event: 'MS luovutus' },
+];
+
+const era3Stats = [
+  { what: 'syöttö/ohitus OUT', hw: 2, ty: 0, ms: 3, tk: 1 },
+  { what: 'johtoheitto OUT', hw: 1, ty: 0, ms: 2, tk: 1 },
+  { what: 'tuplapoltto OUT', hw: 2, ty: 1, ms: 0, tk: 1 },
+  { what: 'soolopoltto OUT', hw: 0, ty: 0, ms: 0, tk: 2 },
+  { what: 'offaus OUT', hw: 1, ty: 1, ms: 1, tk: 0 },
+  { what: 'tiputus/rähmä', hw: 0, ty: 2, ms: 4, tk: 1 },
+  { what: 'tiputettu tippi', hw: 1, ty: 1, ms: 0, tk: 1 },
+  { what: 'luovutus', hw: 0, ty: 0, ms: 1, tk: 1 },
+  { what: 'voittoheitto', hw: 2, ty: 1, ms: 0, tk: 1 },
+];
+
+const era3Events = [
+  { time: '49:12', event: 'MS syöttö out, TK soolopoltto out' },
+  { time: '49:45', event: 'TK voittoheitto' },
+  { time: '50:26', event: 'TK soolopoltto out' },
+  { time: '50:55', event: 'TY rähmätty tip' },
+  { time: '52:09', event: 'TY & MS rähmä' },
+  { time: '52:44', event: 'MS syöttö out' },
+  { time: '53:14', event: 'HW ohitus out, MS johto out' },
+  { time: '53:54', event: 'HW syöttö out' },
+  { time: '54:15', event: 'TY tuplapoltto out' },
+  { time: '54:50', event: 'TY rähmä' },
+  { time: '55:30', event: 'HW johtoheitto out' },
+  { time: '56:22', event: 'HW tuplapoltto kulmaan' },
+  { time: '57:15', event: 'HW offaa kun pitäis tippaa - tupla' },
+  { time: '58:10', event: 'TK rähmä' },
+  { time: '58:52', event: 'TY rähmätty tip' },
+  { time: '59:50', event: 'MS rähmä, TK luovutus' },
+  { time: '01:00:20', event: 'HW offi out' },
+  { time: '01:00:59', event: 'TK tuplapoltto out' },
+  { time: '01:01:45', event: 'TY offi out' },
+  { time: '01:02:46', event: 'HW & TY tuplaa' },
+  { time: '01:03:27', event: 'HW tuplapoltto out' },
+  { time: '01:03:55', event: 'MS luovutus' },
+  { time: '01:04:49', event: 'MS rähmä' },
+  { time: '01:05:47', event: 'MS johto out' },
+  { time: '01:06:27', event: 'MS & TK tuplahyökkäys' },
+  { time: '01:07:15', event: 'MS rähmä' },
+  { time: '01:07:38', event: 'HW rähmätty tip' },
+  { time: '01:08:41', event: 'HW tuplapoltto out' },
+  { time: '01:09:33', event: 'TK rähmätty tip, MS offi out' },
+  { time: '01:10:19', event: 'TK johto out, MS ohitus out' },
+  { time: '01:11:00', event: 'HW ohitus out' },
+  { time: '01:11:50', event: 'HW poltto kulmaan' },
+  { time: '01:12:31', event: 'TK syöttö out, TY ässä' },
+];
+
+const totalStats = [
+  { what: 'syöttö/ohitus OUT', hw: 5, ty: 4, ms: 8, tk: 14 },
+  { what: 'johtoheitto OUT', hw: 2, ty: 3, ms: 5, tk: 2 },
+  { what: 'tuplapoltto OUT', hw: 5, ty: 2, ms: 2, tk: 3 },
+  { what: 'soolopoltto OUT', hw: 2, ty: 2, ms: 0, tk: 5 },
+  { what: 'offaus OUT', hw: 3, ty: 2, ms: 2, tk: 0 },
+  { what: 'tiputus/rähmä', hw: 1, ty: 3, ms: 5, tk: 3 },
+  { what: 'tiputettu tippi', hw: 2, ty: 3, ms: 2, tk: 2 },
+  { what: 'luovutus', hw: 1, ty: 0, ms: 3, tk: 6 },
+  { what: 'voittoheitto', hw: 3, ty: 1, ms: 3, tk: 1 },
+];
+
+const summaryStats = [
+  { what: 'Poisheitot', hw: 17, ty: 13, ms: 17, tk: 24 },
+  { what: 'Tiputukset', hw: 4, ty: 6, ms: 10, tk: 11 },
+];
+
+const notes = [
+  'tyypillisin virhe: syöttö tai ohitusheitto out',
+  'usein poisheitto puolenvaihdon jälkeen',
+  'usein kaksi virhettä peräkkäin (jäädään märehtimään edellistä mokaa?)',
+  'soolopoltot ei kannata juuri koskaan (ks. voittoheittojen ja pois heitettyjen soolopolttojen suhde)',
+  'tilastoista ei näy tuplapaot tai pakopelin tehokkuus',
+  '"luovutus" on makuasia, merkkasin luovutukseksi kaikki, jotka olisivat olleet mahdollisen rajoissa (esim. etupelaajan olisi pitänyt tipata, vaikka takapelaaja oli tippaamassa)',
+  'vaikka tuuli oli vähäinen, lähes kaikki outit tuulen puolelta ohi',
+];
+---
+
+<Layout title="Otteluanalyysi 10.7.2024 – Helsinki DDC" lang="fi" activePage="">
+  <div class="page-header">
+    <div class="container">
+      <h1>OTTELUANALYYSI 10.7.2024</h1>
+      <p>HW &amp; TY vs MS &amp; TK</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <a href="/oppi/" class="back-link">&larr; Takaisin</a>
+
+      <div class="card mb-lg">
+        <p>
+          <strong>Tallenne:</strong>
+          <a href="https://www.youtube.com/watch?v=IscXNk2ddUM">YouTube</a>
+        </p>
+        <h3 class="mt-lg">Selitys</h3>
+        <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
+          <li><strong>luovutus</strong> = kiekko, joka olisi ollut mahdollista pelata jotenkin, mutta ei pelattu</li>
+          <li><strong>voittoheitto</strong> = kiekko, jota ei ole mahdollista pelata tai saada kiinni</li>
+          <li><strong>soolopoltto</strong> = polttoheitto ilman tuplatilannetta</li>
+          <li><strong>offaus</strong> = nopea poisheitto tuplatilanteessa</li>
+        </ul>
+      </div>
+
+      {/* Era 1 */}
+      <h2 class="section-title">1. ER&Auml;</h2>
+      <div class="table-wrap mb-lg">
+        <table class="styled-table">
+          <thead><tr><th>Mitä</th><th>HW</th><th>TY</th><th>MS</th><th>TK</th></tr></thead>
+          <tbody>
+            {era1Stats.map(r => (
+              <tr><td>{r.what}</td><td>{r.hw}</td><td>{r.ty}</td><td>{r.ms}</td><td>{r.tk}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <details class="mb-lg">
+        <summary style="cursor:pointer; font-weight:600; margin-bottom:0.5rem;">Pelitapahtumat</summary>
+        <div class="table-wrap">
+          <table class="styled-table">
+            <thead><tr><th>Aika</th><th>Tapahtuma</th></tr></thead>
+            <tbody>
+              {era1Events.map(e => (
+                <tr><td>{e.time}</td><td>{e.event}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      {/* Era 2 */}
+      <h2 class="section-title">2. ER&Auml;</h2>
+      <div class="table-wrap mb-lg">
+        <table class="styled-table">
+          <thead><tr><th>Mitä</th><th>HW</th><th>TY</th><th>MS</th><th>TK</th></tr></thead>
+          <tbody>
+            {era2Stats.map(r => (
+              <tr><td>{r.what}</td><td>{r.hw}</td><td>{r.ty}</td><td>{r.ms}</td><td>{r.tk}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <details class="mb-lg">
+        <summary style="cursor:pointer; font-weight:600; margin-bottom:0.5rem;">Pelitapahtumat</summary>
+        <div class="table-wrap">
+          <table class="styled-table">
+            <thead><tr><th>Aika</th><th>Tapahtuma</th></tr></thead>
+            <tbody>
+              {era2Events.map(e => (
+                <tr><td>{e.time}</td><td>{e.event}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      {/* Era 3 */}
+      <h2 class="section-title">3. ER&Auml;</h2>
+      <div class="table-wrap mb-lg">
+        <table class="styled-table">
+          <thead><tr><th>Mitä</th><th>HW</th><th>TY</th><th>MS</th><th>TK</th></tr></thead>
+          <tbody>
+            {era3Stats.map(r => (
+              <tr><td>{r.what}</td><td>{r.hw}</td><td>{r.ty}</td><td>{r.ms}</td><td>{r.tk}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <details class="mb-lg">
+        <summary style="cursor:pointer; font-weight:600; margin-bottom:0.5rem;">Pelitapahtumat</summary>
+        <div class="table-wrap">
+          <table class="styled-table">
+            <thead><tr><th>Aika</th><th>Tapahtuma</th></tr></thead>
+            <tbody>
+              {era3Events.map(e => (
+                <tr><td>{e.time}</td><td>{e.event}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      {/* Summary */}
+      <h2 class="section-title">YHTEENVETO</h2>
+      <div class="table-wrap mb-lg">
+        <table class="styled-table">
+          <thead><tr><th>Mitä</th><th>HW</th><th>TY</th><th>MS</th><th>TK</th></tr></thead>
+          <tbody>
+            {totalStats.map(r => (
+              <tr><td><strong>{r.what}</strong></td><td>{r.hw}</td><td>{r.ty}</td><td>{r.ms}</td><td>{r.tk}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap mb-lg">
+        <table class="styled-table">
+          <thead><tr><th>Mitä</th><th>HW</th><th>TY</th><th>MS</th><th>TK</th></tr></thead>
+          <tbody>
+            {summaryStats.map(r => (
+              <tr><td><strong>{r.what}</strong></td><td>{r.hw}</td><td>{r.ty}</td><td>{r.ms}</td><td>{r.tk}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="section-title">HUOMIOITA</h2>
+      <div class="card">
+        <ul style="padding-left: 1.2rem;">
+          {notes.map(n => <li style="margin-bottom: 0.5rem;">{n}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+</Layout>

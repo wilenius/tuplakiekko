@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const terms = [
+  { fi: 'Hysse', en: 'Hyzer', type: 'Yleis', usage: 5, syn: '-', desc: 'Kun kiekon ulkoreuna, eli kiekosta kiinni pitävän käden vastapäätä oleva reuna, on kallellaan maata kohti, heitossa on "hysseä".' },
+  { fi: 'Annukka', en: 'Anhyzer', type: 'Yleis', usage: 5, syn: '-', desc: 'Kun kiekon ulkoreuna, eli kiekosta kiinni pitävän käden vastapäätä oleva reuna, on kallellaan taivasta kohti, heitossa on "annukkaa".' },
+  { fi: 'Hyökkäys', en: 'Attack', type: 'Hyökkäys', usage: 5, syn: '-', desc: 'Pisteentekoyritys. Toinen pelaajista voi yrittää tehdä voittavan heiton, tai pelaajat voivat yrittää yhdessä tuplahyökkäystä.' },
+  { fi: 'Taka', en: 'Back', type: 'Puolustus', usage: 5, syn: '-', desc: 'Pelaaja, joka vastaanottaa johtokiekon tuplapuolustustilanteessa. Taka yleensä katsoo molempien kiekkojen lentoradat, ja sitten joko heittää tai tippaa oman kiekkonsa ensin, tai käskee etupelaajaa pelaamaan kiekkonsa ensin.' },
+  { fi: 'Rysty', en: 'Backhand', type: 'Heitto', usage: 5, syn: '-', desc: 'Rystyheitto tehdään oikein päin olevalla kiekolla, peukalo päälla ja muut sormet alla. Se on pelin yleisin heittotyyppi, ja heitto tehdään yleensä kallistettuna alaspäin (ks. "hysse").' },
+  { fi: 'Harjaus', en: 'Brush', type: 'Puolustus', usage: 2, syn: '-', desc: 'Tippaustyyli, jossa lyödään kiekon ulkoreunaa, jolloin se ponnahtaa takaisin ilmaan. Se tehdään yleensä heitolle, jossa on hysseä, mutta jyrkästi laskeutuvaa upsiheittoa voidaan myös harjata. Se on helpointa tehdä vastatuulen suuntaan.' },
+  { fi: 'Poltto', en: 'Burn', type: 'Hyökkäys', usage: 5, syn: '-', desc: 'Matala ja nopea heitto, joka yleensä laskeutuu vastustajan kentän etuosaan. Yleisin valinta tehdessä tuplausheittoa.' },
+  { fi: 'Aloitevuorossa', en: 'Designated', type: 'Säännöt', usage: 5, syn: 'Des', desc: 'Joukkue, jonka pitää heittää ensimmäisenä pattitilanteessa.' },
+  { fi: 'Tupla', en: 'Double', type: 'Säännöt', usage: 5, syn: 'Two', desc: 'Tuplassa yhden joukkueen pelaaja tai pelaajat koskevat molempiin kiekkoihin yhtä aikaa. Vastustajat saavat tästä kaksi pistettä.' },
+  { fi: 'Tuplahyökkäys', en: 'Doubling Attack', type: 'Hyökkäys', usage: 5, syn: '-', desc: 'Molempien kiekkojen heittäminen vastustajan kenttäpuoliskoon: johtoheitto, jota seuraa hyökkäysheitto.' },
+  { fi: 'Tuplatilanne', en: 'Doubling Situation', type: 'Säännöt', usage: 5, syn: 'Attack Situation', desc: 'Molempien kiekkojen saapuminen yhtä aikaa samalle kenttäpuoliskolle: onnistuneen tuplahyökkäyksen seuraus.' },
+  { fi: 'Tuplausheitto', en: 'Doubling Throw', type: 'Hyökkäys', usage: 5, syn: 'Attack Throw, Follow', desc: 'Tuplahyökkäyksen jälkimmäinen heitto. Se on usein joko poltto- tai ohitusheitto.' },
+  { fi: 'Ohitus', en: 'Dump', type: 'Hyökkäys', usage: 4, syn: '-', desc: 'Hyökkäysheitto, jossa kiekko heitetään kentän etuosassa seisovan vastustajan pään yli, mutta tarpeeksi nopeana ja matalana, jotta siihen olisi vaikea ehtiä kentän takaosassa.' },
+  { fi: 'Pako', en: 'Escape', type: 'Puolustus', usage: 5, syn: '-', desc: 'Molempien kiekkojen onnistunut palautus vastustajille tuplatilanteessa.' },
+  { fi: 'Etu', en: 'Front', type: 'Puolustus', usage: 5, syn: '-', desc: 'Pelaaja, joka hoitaa hyökkäyskiekon (tuplahyökkäyksen jälkimmäinen heitto) tuplatilanteessa. Etu odottaa yleensä takapelaajan ohjetta ja tekee joko tipin tai off-heiton, tai sitten lypsää kiekkoa kunnes se voidaan kopata.' },
+  { fi: 'Kuorrutettu donitsi', en: 'Glazed Donut', type: 'Heitto', usage: 1, syn: '-', desc: 'Hidas ja vähäkierteinen hyökkäysheitto, jossa kiekkoa roikotetaan sormenpäillä, kuvapuoli heittäjää päin, ennen heittoa. Kiekko lentää aluksi pystysuorassa, mutta kierteen puutteen vuoksi se kääntyy hysseksi tai jopa oikaisee itsensä.' },
+  { fi: 'Sinä', en: 'Go', type: 'Puolustus', usage: 4, syn: 'You', desc: 'Takapelaajan huuto, joka merkitsee, että etupelaajan on kosketettava ensiksi kiekkoon, ja tehtävä joko tippi tai off-heitto.' },
+  { fi: 'Pidä', en: 'Hold', type: 'Puolustus', usage: 4, syn: '-', desc: 'Huuto, joka merkitsee, että joukkuetoverin on kopattava kiekko ja pidettävä se. Huuto tehdään yleensä silloin, kun on selvää että toinen kiekko on menossa ulos.' },
+  { fi: 'Peukkukoukku', en: 'Hook Thumb', type: 'Heitto', usage: 2, syn: '-', desc: 'Upsiheitto, jossa kiekkoa pidetään etikettipuoli pois päin kehosta, peukalon ulkosyrjä kiekon reunuksen alla. Kiekon lentorata muistuttaa skubaa.' },
+  { fi: 'Pattitilanne', en: 'Impasse', type: 'Säännöt', usage: 5, syn: '-', desc: 'Tilanne, jossa kumpikin joukkue pitää yhtä kiekkoa. Aloitevuorossa olevan joukkueen pitää heittää ensimmäisenä.' },
+  { fi: 'Rystyvippaus', en: 'Inflip', type: 'Heitto', usage: 1, syn: '-', desc: 'Hidas, vähäkierteinen heitto, joka heitetään rystynä, mutta kämmenheiton otteella, kuvapuoli kohti heittäjää. Kierteen puute saa sen lepattamaan ja oikenemaan.' },
+  { fi: 'Aloite', en: 'Initiation', type: 'Säännöt', usage: 5, syn: '-', desc: 'Aloitevuorossa olevan joukkueen velvoite heittää ensin pattitilanteessa.' },
+  { fi: 'Jedi', en: 'Jedi', type: 'Hyökkäys', usage: 1, syn: '-', desc: 'Tuplahyökkäys, jossa johto heitetään kentän etuosaan, usein ilmapomppuna, jolloin se hidastuu ja saapuu yhtä aikaa perille polttoheiton kanssa.' },
+  { fi: 'Johtoheitto', en: 'Lead', type: 'Hyökkäys', usage: 5, syn: '-', desc: 'Tuplahyökkäyksen ensimmäinen heitto. Sen pitää olla ilmassa tarpeeksi pitkään, jotta polttoheitto, joka heitetään myöhemmin, tulisi perille samaan aikaan.' },
+  { fi: 'Lypsy', en: 'Milk', type: 'Puolustus', usage: 4, syn: '-', desc: 'Koppauksen viivästyttäminen, jotta joukkuetoveri ehtii pelata omaa kiekkoaan ensin.' },
+  { fi: 'Off', en: 'Off', type: 'Puolustus', usage: 4, syn: 'Quick Release', desc: 'Koppaus ja heitto yhdellä nopealla liikkeellä, jotta vältettäisiin tupla. Onnistuu parhaiten, jos kiekko kopataan suoraan heitto-otteella.' },
+  { fi: 'Heikko puoli', en: 'Offside', type: 'Hyökkäys', usage: 4, syn: 'Weak Side', desc: 'Vahvan puolen vastakohta: se kentän puoli, jonne on vaikeampaa heittää poltto. Esimerkiksi, oikean käden upsipoltto vierii yleensä vasemmalle, jolloin vasen kenttäpuolisko olisi heikko puoli.' },
+  { fi: 'Ruuhkahyökkäys', en: 'Proximity Attack', type: 'Hyökkäys', usage: 3, syn: '-', desc: 'Tuplahyökkäys, jossa hyökkäysheitto sijoitetaan mahdollisimman lähelle johtoheittoa, jolloin puolustajat joutuvat tekemään paon samassa kohdassa kenttää, ollen mahdollisesti toistensa tiellä.' },
+  { fi: 'Pitkä', en: 'Rally Shot', type: 'Puolustus', usage: 4, syn: '-', desc: 'Aloitevuorossa olevan joukkueen heitto pattitilanteessa. Heitto on parasta tehdä lähelle takarajaa, koska kiekosta tulee seuraavan hyökkäyksen polttoheitto.' },
+  { fi: 'Skuba', en: 'Scoober', type: 'Heitto', usage: 3, syn: '-', desc: 'Rystyotteella olan korkeudelta tehty heitto, joka lähtee käsi edellä, kiekon logopuoli pois päin kehosta.' },
+  { fi: 'Kämmen', en: 'Sidearm', type: 'Heitto', usage: 4, syn: 'Forehand, Flick', desc: 'Heitto, jossa käsi on taaempana kuin keho. Peukalo on kiekon päällä, ja yhdestä kolmeen sormea on kiekon reunuksen alla.' },
+  { fi: 'Hiipijä', en: 'Sneaker', type: 'Heitto', usage: 2, syn: '-', desc: 'Matala oikein päin heitetty kaartava heitto, joka ohittaa syöttäjän. Ideana on yllättää syöttöönsä keskittynyt pelaaja.' },
+  { fi: 'Soolohyökkäys', en: 'Solo Attack', type: 'Hyökkäys', usage: 3, syn: 'Solo Burn', desc: 'Hyökkäys yksi vastaan yksi -tilanteessa, yleensä aloitevuorossa heitetty, vaihtoehtona pitkälle heitolle.' },
+  { fi: 'Levityshyökkäys', en: 'Spread Attack', type: 'Hyökkäys', usage: 2, syn: '-', desc: 'Tuplahyökkäys, jossa johto- ja hyökkäysheitot tulevat eri puolille kenttää, mikä tekee paon koordinoimisesta hankalampaa.' },
+  { fi: 'Vaarna', en: 'Staker', type: 'Heitto', usage: 3, syn: '-', desc: 'Rystyheitto, jossa peukalo on kiekon alla ja muut sormet kiekon päällä. Heitetään polttona heikolle puolelle kenttää.' },
+  { fi: 'Vahva puoli', en: 'Strong Side', type: 'Hyökkäys', usage: 4, syn: '-', desc: 'Se kentän puoli, jonne on helpompi heittää sisään jäävä polttoheitto. Esimerkiksi oikeakätisen heittämä upsi vierii yleensä vasemmalle, joten sen vahva puoli on oikea. Oikealla kädellä heitetyn skuban tai vaarnan vahva puoli taas on vasen, koska ne kaartavat yleensä oikealle.' },
+  { fi: 'Peukku', en: 'Thumber', type: 'Heitto', usage: 1, syn: '-', desc: 'Samanlainen heitto kuin kämmen, paitsi että peukalo on pituussuunnassa kiekon reunuksen alla.' },
+  { fi: 'Aika(a)', en: 'Time', type: 'Puolustus', usage: 3, syn: 'All Day, Throw Yours', desc: 'Takapelaajan huuto, jolla kerrotaan etupelaajalle, että hänellä on tarpeeksi aikaa ottaa koppi ja heittää kiekko takaisin.' },
+  { fi: 'Tip(paan)', en: 'Tip', type: 'Puolustus', usage: 4, syn: 'Tipping, Tap, Tapping', desc: 'Huuto, jolla kerrotaan joukkuetoverille aikomuksesta ponnauttaa kiekko ilmaan, jotta joukkuetoveri saisi palautettua toisen kiekon.' },
+  { fi: 'Upsi', en: 'Two-Finger', type: 'Heitto', usage: 4, syn: 'Hammer', desc: 'Olan yli heitettu kämmenheitto. Voidaan käyttää lähes missä tahansa tilanteessa, erityisesti ohitus- tai polttoheittona.' },
+  { fi: 'Rystyupsi', en: 'UD', type: 'Heitto', usage: 3, syn: 'Upside-Down, UD Backhand', desc: 'Rystyheitto, jossa kiekko on ylösalaisin ja peukalo on kiekon reunuksen alla. Käytetään yleensä johtoheittona, joskus myös poltoissa.' },
+  { fi: 'Märkä rätti', en: 'Wet Blanket', type: 'Heitto', usage: 2, syn: '-', desc: 'Hidas matalakierteinen heitto, joka on rannevippaus lukitulla ranteella. Onnistuessaan se lentää aluksi normaalisti, kunnes alkaa heilua ennalta-arvaamattomasti kierteen loppuessa.' },
+  { fi: 'Rannevippaus', en: 'Wrist Flip', type: 'Heitto', usage: 4, syn: '-', desc: 'Kämmenheitto, jossa peukalo on kiekon alla, ja heitto lähtee käsivarsi edellä. Erityisen käyttökelpoinen nopeassa poisheitossa, jossa upsi otetaan kiinni peukalo päällä, käännetään kiekko oikein päin, jolloin peukalo menee kiekon alle, ja vipataan pois.' },
+];
+
+function stars(n: number): string {
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
+}
+---
+
+<Layout title="Sanasto – Helsinki DDC" lang="fi" activePage="Sanasto">
+  <div class="page-header">
+    <div class="container">
+      <h1>TUPLAKIEKKOSANASTO</h1>
+      <p>
+        Alkuper&auml;inen <a href="https://doubledisccourt.com/glossary.html" style="color: var(--color-amber);">englanninkielinen sanasto</a>: Conrad Damon
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="card mb-lg">
+        <p>
+          Alla on taulukko tuplakiekkoon liittyvist&auml; k&auml;sitteist&auml;. Joillain k&auml;sitteist&auml; saattaa olla eri merkityksi&auml;
+          muissa frisbeelajeissa (esim. "skuba"). K&auml;&auml;nn&ouml;kset eiv&auml;t ole kaikki kirjaimellisia, vaan tehty vastaamaan
+          suomen kieleen vakiintunutta k&auml;ytt&ouml;&auml;.
+        </p>
+        <p class="mt-lg">
+          K&auml;ytt&ouml;-sarake kertoo, kuinka keskeinen sana on:
+          <span class="usage-stars">&#9733;</span> Harvinainen &ndash;
+          <span class="usage-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> K&auml;ytet&auml;&auml;n joka peliss&auml;
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>K&auml;site</th>
+              <th>Englanniksi</th>
+              <th>Tyyppi</th>
+              <th>K&auml;ytt&ouml;</th>
+              <th>Synonyymej&auml;</th>
+              <th>Selitys</th>
+            </tr>
+          </thead>
+          <tbody>
+            {terms.map(t => (
+              <tr>
+                <td><strong>{t.fi}</strong></td>
+                <td>{t.en}</td>
+                <td>{t.type}</td>
+                <td class="usage-stars">{stars(t.usage)}</td>
+                <td>{t.syn}</td>
+                <td>{t.desc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</Layout>
